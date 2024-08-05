@@ -1,0 +1,17 @@
+/Users/btank/NOVOBI/patient-management-backend/publish/PatientManagementApi
+/Users/btank/NOVOBI/patient-management-backend/publish/appsettings.Development.json
+/Users/btank/NOVOBI/patient-management-backend/publish/appsettings.json
+/Users/btank/NOVOBI/patient-management-backend/publish/PatientManagementApi.dll
+/Users/btank/NOVOBI/patient-management-backend/publish/PatientManagementApi.deps.json
+/Users/btank/NOVOBI/patient-management-backend/publish/PatientManagementApi.runtimeconfig.json
+/Users/btank/NOVOBI/patient-management-backend/publish/PatientManagementApi.pdb
+/Users/btank/NOVOBI/patient-management-backend/publish/Microsoft.AspNetCore.OpenApi.dll
+/Users/btank/NOVOBI/patient-management-backend/publish/Microsoft.EntityFrameworkCore.dll
+/Users/btank/NOVOBI/patient-management-backend/publish/Microsoft.EntityFrameworkCore.Abstractions.dll
+/Users/btank/NOVOBI/patient-management-backend/publish/Microsoft.EntityFrameworkCore.Relational.dll
+/Users/btank/NOVOBI/patient-management-backend/publish/Microsoft.OpenApi.dll
+/Users/btank/NOVOBI/patient-management-backend/publish/MySqlConnector.dll
+/Users/btank/NOVOBI/patient-management-backend/publish/Pomelo.EntityFrameworkCore.MySql.dll
+/Users/btank/NOVOBI/patient-management-backend/publish/Swashbuckle.AspNetCore.Swagger.dll
+/Users/btank/NOVOBI/patient-management-backend/publish/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/btank/NOVOBI/patient-management-backend/publish/Swashbuckle.AspNetCore.SwaggerUI.dll

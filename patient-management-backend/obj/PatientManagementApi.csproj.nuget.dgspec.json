@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/btank/NOVOBI/PatientManagementApi/PatientManagementApi.csproj": {}
+    "/Users/btank/NOVOBI/patient-management-backend/PatientManagementApi.csproj": {}
   },
   "projects": {
-    "/Users/btank/NOVOBI/PatientManagementApi/PatientManagementApi.csproj": {
+    "/Users/btank/NOVOBI/patient-management-backend/PatientManagementApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/btank/NOVOBI/PatientManagementApi/PatientManagementApi.csproj",
+        "projectUniqueName": "/Users/btank/NOVOBI/patient-management-backend/PatientManagementApi.csproj",
         "projectName": "PatientManagementApi",
-        "projectPath": "/Users/btank/NOVOBI/PatientManagementApi/PatientManagementApi.csproj",
+        "projectPath": "/Users/btank/NOVOBI/patient-management-backend/PatientManagementApi.csproj",
         "packagesPath": "/Users/btank/.nuget/packages/",
-        "outputPath": "/Users/btank/NOVOBI/PatientManagementApi/obj/",
+        "outputPath": "/Users/btank/NOVOBI/patient-management-backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/btank/.nuget/NuGet/NuGet.Config"
@@ -44,6 +44,10 @@
           "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[8.0.7, )"
             },

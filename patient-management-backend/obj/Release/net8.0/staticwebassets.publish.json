@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "TOZBAPyJWguyOo9oaE6/VUkl9AsLYW4kcpiO9K942Cc=",
+  "Source": "PatientManagementApi",
+  "BasePath": "_content/PatientManagementApi",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
