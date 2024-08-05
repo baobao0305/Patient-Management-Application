@@ -1,9 +1,9 @@
-name: Build and Deploy ASP.NET Core App
+name: Build and Deploy
 
 on:
   push:
     branches:
-      - main  # Hoặc nhánh bạn sử dụng để triển khai
+      - main
 
 jobs:
   build:
@@ -13,23 +13,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up .NET
+      - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '7.x'  # Phiên bản .NET Core bạn đang sử dụng
+          dotnet-version: '7.x'  # Thay đổi phiên bản .NET nếu cần
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: |
+          cd YourProjectDirectory  # Thay đổi thành thư mục chứa file .csproj hoặc .sln của bạn
+          dotnet restore
 
       - name: Build
-        run: dotnet build --configuration Release
+        run: |
+          cd YourProjectDirectory  # Thay đổi thành thư mục chứa file .csproj hoặc .sln của bạn
+          dotnet build --configuration Release
 
       - name: Publish
-        run: dotnet publish --configuration Release --output ./publish
+        run: |
+          cd YourProjectDirectory  # Thay đổi thành thư mục chứa file .csproj hoặc .sln của bạn
+          dotnet publish --configuration Release --output ./publish
 
-      - name: Deploy to Azure
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: ./publish
+          package: './publish'
