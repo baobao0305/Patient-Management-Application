@@ -1,34 +1,31 @@
-name: Build and deploy React app to Azure Static Web Apps
+name: Deploy Frontend
 
 on:
   push:
     branches:
-      - main
+      - main  # Hoặc tên nhánh của bạn
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
       - name: Install dependencies
-        working-directory: patient-management-frontend
         run: npm install
+        working-directory: ./patient-management-frontend
 
-      - name: Build the app
-        working-directory: patient-management-frontend
-        run: npm run build
+      - name: Build
+        run: npm run build --if-present
+        working-directory: ./patient-management-frontend
 
-      - name: Deploy to Azure
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
-          slot-name: production
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: patient-management-frontend/build
+      - name: Run tests
+        run: npm run test --if-present
+        working-directory: ./patient-management-frontend
