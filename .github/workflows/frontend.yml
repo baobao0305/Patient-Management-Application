@@ -26,6 +26,7 @@ jobs:
       - name: Build
         run: |
           cd patient-management-frontend
+          export NODE_OPTIONS=--openssl-legacy-provider
           npm run build --if-present
 
       - name: Deploy to Azure Static Web Apps
