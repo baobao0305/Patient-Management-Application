@@ -1,4 +1,4 @@
-name: Build and Deploy Frontend
+name: Build and Deploy
 
 on:
   push:
@@ -13,27 +13,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
-          node-version: '20'
+          dotnet-version: '7.x'
 
-      - name: Install dependencies
+      - name: Restore dependencies
         run: |
-          cd patient-management-frontend
-          npm install
+          cd patient-management-backend  
+          dotnet restore
 
       - name: Build
         run: |
-          cd patient-management-frontend
-          export NODE_OPTIONS=--openssl-legacy-provider
-          npm run build --if-present
+          cd patient-management-backend 
+          dotnet build --configuration Release
 
-      - name: Deploy to Azure Static Web Apps
-        uses: azure/static-web-apps-deploy@v1
+      - name: Publish
+        run: |
+          cd patient-management-backend  
+          dotnet publish --configuration Release --output ./publish
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: 'upload'
-          app_location: 'patient-management-frontend'
-          output_location: 'patient-management-frontend/build'
+          app-name: ${{ secrets.FRONTEND_AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.FRONTEND_AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: './publish'
