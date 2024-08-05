@@ -11,6 +11,7 @@ const AddPatientForm = () => {
   const [emails, setEmails] = useState(['']);
   const [primaryAddress, setPrimaryAddress] = useState('');
   const [secondaryAddress, setSecondaryAddress] = useState('');
+  const [isActive, setIsActive] = useState(true);
 
 
   const handleSubmit = async (e) => {
@@ -20,6 +21,7 @@ const AddPatientForm = () => {
       lastName,
       gender,
       dateOfBirth,
+      isActive,
       ContactInfo: [
         ...phones.map(phone => ({ ContactType: 'Phone', ContactDetail: phone})),
         ...emails.map(email => ({ ContactType: 'Email', ContactDetail: email})),
@@ -43,6 +45,7 @@ const AddPatientForm = () => {
       setEmails(['']);
       setPrimaryAddress('');
       setSecondaryAddress('');
+      setIsActive(true);
     } catch (error) {
       if (error.response) {
         console.error('Error adding patient:', error.response.data);

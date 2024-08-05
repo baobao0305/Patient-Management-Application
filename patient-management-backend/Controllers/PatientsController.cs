@@ -49,7 +49,7 @@ namespace PatientManagementApi.Controllers
                 return BadRequest("Patient data is null.");
             }
 
-            
+            patient.IsActive = "Active";
 
             // Add patient
             _context.Patients.Add(patient);
