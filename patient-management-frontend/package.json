@@ -24,7 +24,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -44,5 +46,11 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5013"
+  "proxy": "http://localhost:5013",
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
+  },
+  "homepage": "https://baobao0305.github.io/git@github.com:baobao0305/Novobi-Patient-Management-Application"
+
+  
 }

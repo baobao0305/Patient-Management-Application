@@ -69,3 +69,4 @@
 /Users/btank/NOVOBI/PatientManagementApi/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Relational.dll
 /Users/btank/NOVOBI/PatientManagementApi/bin/Debug/net8.0/MySqlConnector.dll
 /Users/btank/NOVOBI/PatientManagementApi/bin/Debug/net8.0/Pomelo.EntityFrameworkCore.MySql.dll
+/Users/btank/NOVOBI/PatientManagementApi/obj/Debug/net8.0/PatientManagementApi.sourcelink.json
