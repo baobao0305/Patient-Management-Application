@@ -6,7 +6,7 @@ import UpdatePatientForm from './components/UpdatePatientForm';
 import PatientDetail from './components/PatientDetail';
 
 const App = () => (
-  <Router basename="/Novobi-Patient-Management-Application">
+  <Router basename="/Patient-Management-Application">
     <div className="App">
       <Routes>
         <Route path="/" element={<PatientList />} />
