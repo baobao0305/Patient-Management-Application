@@ -1,12 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import PatientList from './components/PatientList';
 import AddPatientForm from './components/AddPatientForm';
 import UpdatePatientForm from './components/UpdatePatientForm';
 import PatientDetail from './components/PatientDetail';
 
 const App = () => (
-  <Router basename="/Patient-Management-Application">
+  <Router>
     <div className="App">
       <Routes>
         <Route path="/" element={<PatientList />} />
