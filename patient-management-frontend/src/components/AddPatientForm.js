@@ -11,7 +11,7 @@ const AddPatientForm = () => {
   const [emails, setEmails] = useState(['']);
   const [primaryAddress, setPrimaryAddress] = useState('');
   const [secondaryAddress, setSecondaryAddress] = useState('');
-  const [isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState('Active');
 
 
   const handleSubmit = async (e) => {
@@ -45,7 +45,7 @@ const AddPatientForm = () => {
       setEmails(['']);
       setPrimaryAddress('');
       setSecondaryAddress('');
-      setIsActive(true);
+      setIsActive('Active');
     } catch (error) {
       if (error.response) {
         console.error('Error adding patient:', error.response.data);
