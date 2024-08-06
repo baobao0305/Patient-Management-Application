@@ -37,4 +37,4 @@ jobs:
 
       - name: Check deployment status
         run: |
-          curl -I https://${{ env.AZURE_WEB_APP }}.azurewebsites.net
+          curl -I https://${{ env.AZURE_WEB_APP }}-e0crb3fqgke9heet.southeastasia-01.azurewebsites.net
