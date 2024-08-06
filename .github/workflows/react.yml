@@ -13,8 +13,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set NODE_OPTIONS for OpenSSL legacy support
-      run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
 
     - name: Setup Node.js
       uses: actions/setup-node@v3
@@ -26,8 +24,10 @@ jobs:
       run: npm install
 
     - name: Build
-      working-directory: patient-management-frontend
-      run: npm run build
+      run: |
+          cd patient-management-frontend
+          export NODE_OPTIONS=--openssl-legacy-provider
+          npm run build
 
     - name: Deploy
       uses: jamesIves/github-pages-deploy-action@v4
