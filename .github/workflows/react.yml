@@ -3,7 +3,7 @@ name: Deploy React App
 on:
   push:
     branches:
-      - main  # Thay đổi tên nhánh nếu cần
+      - main
 
 jobs:
   build:
@@ -13,21 +13,24 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Set NODE_OPTIONS for OpenSSL legacy support
+      run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
+
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'  # Sử dụng phiên bản Node.js của bạn
+        node-version: '20'  # Hoặc phiên bản Node.js bạn sử dụng
 
     - name: Install dependencies
-      working-directory: patient-management-frontend  # Chỉ định thư mục chứa package.json
+      working-directory: patient-management-frontend
       run: npm install
 
     - name: Build
-      working-directory: patient-management-frontend  # Chỉ định thư mục chứa package.json
+      working-directory: patient-management-frontend
       run: npm run build
 
     - name: Deploy
       uses: jamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
-        folder: patient-management-frontend/build  # Chỉ định thư mục build
+        folder: patient-management-frontend/build
