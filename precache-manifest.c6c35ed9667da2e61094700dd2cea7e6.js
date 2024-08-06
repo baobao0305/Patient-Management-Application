@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "40feb45ee2f18f0a80278a1a058b4c1a",
+    "revision": "aea49c104fbf9be4c32f0d117eb24e2a",
     "url": "/Patient-Management-Application/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Patient-Management-Application/static/css/2.b71989ea.chunk.css"
   },
   {
-    "revision": "1ef4677b9e4d976aa086",
+    "revision": "674a95b40c27a3a928df",
     "url": "/Patient-Management-Application/static/css/main.5ecd60fb.chunk.css"
   },
   {
@@ -24,8 +24,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Patient-Management-Application/static/js/3.4abf81e6.chunk.js"
   },
   {
-    "revision": "1ef4677b9e4d976aa086",
-    "url": "/Patient-Management-Application/static/js/main.87bbbd70.chunk.js"
+    "revision": "674a95b40c27a3a928df",
+    "url": "/Patient-Management-Application/static/js/main.bf7a65d1.chunk.js"
   },
   {
     "revision": "037c6a9f510c4069b31c",
