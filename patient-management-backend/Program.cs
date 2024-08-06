@@ -1,56 +1,41 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using PatientManagementApi.Data;
-using System.Text.Json.Serialization;
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Thêm dịch vụ CORS
-builder.Services.AddCors(options =>
+public class Program
 {
-    options.AddDefaultPolicy(
-        policy =>
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Cấu hình dịch vụ xác thực
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://login.microsoftonline.com/82d7e636-d2ad-40b6-aca0-056b7b1711f2";
+                options.Audience = "api://0c7431bf-22c7-4b35-9873-b9d263198030";
+            });
+
+        builder.Services.AddAuthorization();
+        builder.Services.AddControllers();
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
         {
-            policy.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-        });
-});
+            app.UseDeveloperExceptionPage();
+        }
+        else
+        {
+            app.UseExceptionHandler("/Home/Error");
+            app.UseHsts();
+        }
 
-// Thêm dịch vụ DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), 
-        new MySqlServerVersion(new Version(8, 0, 21)))); // Chỉnh sửa phiên bản MySQL theo đúng phiên bản bạn đang sử dụng
+        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+        app.UseRouting();
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-});
+        app.UseAuthentication(); // Phải có dòng này
+        app.UseAuthorization();
 
-var app = builder.Build();
+        app.MapControllers();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
+        app.Run();
+    }
 }
-else
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-// Sử dụng CORS
-app.UseCors();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
