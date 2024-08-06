@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Deploy API
 
 on:
   push:
@@ -16,21 +16,21 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.x' 
+          dotnet-version: '8.x'
 
       - name: Restore dependencies
         run: |
-          cd patient-management-backend  
+          cd patient-management-backend
           dotnet restore
 
       - name: Build
         run: |
-          cd patient-management-backend 
+          cd patient-management-backend
           dotnet build --configuration Release
 
       - name: Publish
         run: |
-          cd patient-management-backend  
+          cd patient-management-backend
           dotnet publish --configuration Release --output ./publish
 
       - name: Deploy to Azure Web App
@@ -39,3 +39,8 @@ jobs:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
           package: './patient-management-backend/publish'
+
+      - name: Setup SQL Database Connection
+        run: |
+          echo "Setting up SQL Database Connection..."
+          echo "SQL_CONNECTION_STRING=${{ secrets.SQL_CONNECTION_STRING }}" >> $GITHUB_ENV
