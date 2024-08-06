@@ -53,6 +53,7 @@ jobs:
       - name: Build frontend
         run: |
           cd patient-management-frontend
+          export NODE_OPTIONS=--openssl-legacy-provider
           npm run build
 
       - name: Deploy frontend
