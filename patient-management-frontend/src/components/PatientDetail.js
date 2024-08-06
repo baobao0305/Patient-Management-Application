@@ -17,7 +17,7 @@ const PatientDetail = () => {
     phoneContacts: [],
     emailContacts: [],
     status: '',
-    inactiveReason: '' // Field for inactive reason
+    inactiveReason: '' 
   });
 
   useEffect(() => {

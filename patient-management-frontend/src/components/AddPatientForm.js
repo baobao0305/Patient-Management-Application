@@ -49,12 +49,6 @@ const AddPatientForm = () => {
       if (error.response) {
         console.error('Error adding patient:', error.response.data);
         alert(`Error adding patient: ${error.response.data}`);
-      } else if (error.request) {
-        console.error('Error adding patient: No response received');
-        alert('Error adding patient: No response received');
-      } else {
-        console.error('Error adding patient:', error.message);
-        alert(`Error adding patient: ${error.message}`);
       }
     }
   };

@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const UpdatePatientForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  
   const [patient, setPatient] = useState({
     firstName: '',
     lastName: '',
@@ -17,34 +17,38 @@ const UpdatePatientForm = () => {
     secondaryAddress: '',
     phoneContacts: [],
     emailContacts: [],
-    isActive: '', // Default value
-    inactiveReason: ''
+    isActive:'', // default value
+    inactiveReason: '' 
   });
 
   useEffect(() => {
     const fetchPatient = async () => {
       try {
         // Fetch patient information
-        const { data: patientData } = await axios.get(`https://localhost:7141/api/patients/${id}`);
+        const patientResponse = await axios.get(`https://localhost:7141/api/patients/${id}`);
+        const patientData = patientResponse.data;
+
         // Fetch addresses
-        const { data: addresses } = await axios.get(`https://localhost:7141/api/patients/${id}/addresses`);
+        const addressesResponse = await axios.get(`https://localhost:7141/api/patients/${id}/addresses`);
+        const addresses = addressesResponse.data;
+
         // Fetch contacts
-        const { data: contactsData } = await axios.get(`https://localhost:7141/api/patients/${id}/contacts`);
-        const contacts = contactsData.$values || [];
+        const contactsResponse = await axios.get(`https://localhost:7141/api/patients/${id}/contacts`);
+        const contactsData = contactsResponse.data.$values || [];
 
         // Extract address details
         const primaryAddress = addresses.primaryAddress || '';
         const secondaryAddress = addresses.secondaryAddress || '';
 
         // Separate phone and email contacts
-        const phoneContacts = contacts.filter(c => c.contactType === 'Phone').map(c => c.contactDetail);
-        const emailContacts = contacts.filter(c => c.contactType === 'Email').map(c => c.contactDetail);
+        const phoneContacts = contactsData.filter(c => c.contactType === 'Phone').map(c => c.contactDetail);
+        const emailContacts = contactsData.filter(c => c.contactType === 'Email').map(c => c.contactDetail);
 
         // Format date of birth
         const date = new Date(patientData.dateOfBirth);
         date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
         const formattedDateOfBirth = date.toISOString().split('T')[0];
-
+        
         setPatient({
           firstName: patientData.firstName,
           lastName: patientData.lastName,
@@ -74,7 +78,7 @@ const UpdatePatientForm = () => {
     updatedContacts[index] = e.target.value;
     setPatient({ ...patient, [type]: updatedContacts });
   };
-
+  
   const handleAddContact = (type) => {
     setPatient({ ...patient, [type]: [...patient[type], ''] });
   };
@@ -86,22 +90,27 @@ const UpdatePatientForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Kiểm tra các trường không được để trống
     if (!patient.primaryAddress.trim()) {
       alert('Primary address cannot be empty.');
       return;
     }
+  
     if (patient.phoneContacts.length === 0) {
       alert('At least one phone contact is required.');
       return;
     }
+  
     if (patient.emailContacts.length === 0) {
       alert('At least one email contact is required.');
       return;
     }
+    
     if (patient.isActive === 'Inactive' && !patient.inactiveReason) {
       alert('Please provide a reason for inactivation.');
       return;
     }
+
     try {
       const dataToSubmit = {
         PatientID: id,
@@ -109,7 +118,7 @@ const UpdatePatientForm = () => {
         lastName: patient.lastName,
         gender: patient.gender,
         dateOfBirth: patient.dateOfBirth,
-        isActive: patient.isActive === 'Active', // Convert to boolean
+        isActive: patient.isActive, // Chuyển đổi thành boolean
         inactiveReason: patient.isActive === 'Active' ? null : patient.inactiveReason,
         ContactInfo: [
           ...patient.phoneContacts.map(contact => ({ ContactType: 'Phone', ContactDetail: contact, PatientID: id })),
@@ -280,7 +289,7 @@ const UpdatePatientForm = () => {
           <Button variant="outlined" onClick={() => handleAddContact('emailContacts')}>
             Add Email Contact
           </Button>
-          <Button type="submit" variant="contained" color="primary" style={{ marginTop: '16px' }}>
+          <Button variant="contained" color="primary" type="submit" style={{ marginTop: '16px', display: 'block'  }}>
             Update Patient
           </Button>
         </form>
