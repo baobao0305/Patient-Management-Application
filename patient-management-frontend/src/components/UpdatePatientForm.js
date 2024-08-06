@@ -81,8 +81,26 @@ const UpdatePatientForm = () => {
     setPatient({ ...patient, [type]: [...patient[type], ''] });
   };
 
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Kiểm tra các trường không được để trống
+    if (!patient.primaryAddress.trim()) {
+      alert('Primary address cannot be empty.');
+      return;
+    }
+  
+    if (patient.phoneContacts.length === 0) {
+      alert('At least one phone contact is required.');
+      return;
+    }
+  
+    if (patient.emailContacts.length === 0) {
+      alert('At least one email contact is required.');
+      return;
+    }
     if (patient.isActive === 'Inactive' && !patient.inactiveReason) {
       alert('Please provide a reason for inactivation.');
       return;
@@ -201,6 +219,9 @@ const UpdatePatientForm = () => {
             margin="normal"
             value={patient.primaryAddress}
             onChange={handleChange}
+            required
+            error={!patient.primaryAddress.trim()}
+            helperText={!patient.primaryAddress.trim() ? 'Primary address cannot be empty.' : ''}
           />
           <TextField
             label="Secondary Address"
@@ -221,6 +242,9 @@ const UpdatePatientForm = () => {
               margin="normal"
               value={contact}
               onChange={(e) => handleChangeContact(index, 'phoneContacts', e)}
+              required
+              error={!contact.trim()}
+              helperText={!contact.trim() ? 'Phone contact cannot be empty.' : ''}
             />
           ))}
           <Button variant="outlined" onClick={() => handleAddContact('phoneContacts')}>
@@ -235,6 +259,9 @@ const UpdatePatientForm = () => {
               margin="normal"
               value={contact}
               onChange={(e) => handleChangeContact(index, 'emailContacts', e)}
+              required
+              error={!contact.trim()}
+              helperText={!contact.trim() ? 'Email contact cannot be empty.' : ''}
             />
           ))}
           <Button variant="outlined" onClick={() => handleAddContact('emailContacts')}>
