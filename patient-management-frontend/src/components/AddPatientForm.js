@@ -16,8 +16,26 @@ const AddPatientForm = () => {
   const [isActive, setIsActive] = useState('Active');
   const navigate = useNavigate();
 
+  const checkIfPatientExists = async (firstName, lastName, dateOfBirth) => {
+    try {
+      const response = await axios.get(`https://localhost:7141/api/patients/check`, {
+        params: { firstName, lastName, dateOfBirth }
+      });
+      return response.data.exists;
+    } catch (error) {
+      console.error('Error checking if patient exists:', error);
+      return false;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const exists = await checkIfPatientExists(firstName, lastName, dateOfBirth);
+  
+    if (exists) {
+      alert('A patient with this information already exists. Please enter different details.');
+      return;
+    }
     const patient = {
       firstName,
       lastName,

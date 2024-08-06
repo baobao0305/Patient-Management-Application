@@ -259,6 +259,13 @@ namespace PatientManagementApi.Controllers
 
             return NoContent();
         }
+        [HttpGet("check")]
+        public async Task<IActionResult> CheckIfPatientExists(string firstName, string lastName, DateTime dateOfBirth)
+        {
+            var exists = await _context.Patients.AnyAsync(p => p.FirstName == firstName && p.LastName == lastName && p.DateOfBirth == dateOfBirth);
+            return Ok(new { exists });
+        }
+
 
         private bool PatientExists(int id)
         {
