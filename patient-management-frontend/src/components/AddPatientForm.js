@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Paper, FormControl, InputLabel, Select, MenuItem, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from 'react-router-dom';
 
 const AddPatientForm = () => {
   const [firstName, setFirstName] = useState('');
@@ -13,6 +14,7 @@ const AddPatientForm = () => {
   const [primaryAddress, setPrimaryAddress] = useState('');
   const [secondaryAddress, setSecondaryAddress] = useState('');
   const [isActive, setIsActive] = useState('Active');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,6 +47,7 @@ const AddPatientForm = () => {
       setPrimaryAddress('');
       setSecondaryAddress('');
       setIsActive('Active');
+      navigate('/');
     } catch (error) {
       if (error.response) {
         console.error('Error adding patient:', error.response.data);
