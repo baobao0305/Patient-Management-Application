@@ -19,13 +19,15 @@ jobs:
         node-version: '20'  # Sử dụng phiên bản Node.js của bạn
 
     - name: Install dependencies
+      working-directory: patient-management-frontend  # Chỉ định thư mục chứa package.json
       run: npm install
 
     - name: Build
+      working-directory: patient-management-frontend  # Chỉ định thư mục chứa package.json
       run: npm run build
 
     - name: Deploy
       uses: jamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
-        folder: build
+        folder: patient-management-frontend/build  # Chỉ định thư mục build
