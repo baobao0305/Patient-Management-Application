@@ -1,19 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-  TextField,
-  TablePagination,
-  Box,
-  IconButton,
-  Tooltip,
-  Button
-} from '@mui/material';
+import { Table, TableHead, TableBody, TableRow, TableCell, Paper, TextField, TablePagination, Box, IconButton, Tooltip, Button, Snackbar, Alert } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
@@ -25,6 +12,7 @@ const PatientList = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,10 +24,10 @@ const PatientList = () => {
           setPatients(data.$values);
           setFilteredPatients(data.$values);
         } else {
-          console.error('Unexpected data format:', data);
+          setError('Unexpected data format.');
         }
       } catch (error) {
-        console.error('Error fetching patients:', error);
+        setError('Error fetching patients.');
       }
     };
 
@@ -54,7 +42,7 @@ const PatientList = () => {
         const fullName = `${patient.firstName} ${patient.lastName}`.toLowerCase();
         const matchesName = fullName.includes(lowercasedSearch);
         const matchesDOB = patient.dateOfBirth?.includes(lowercasedSearch);
-        const matchesContact = patient.contactInfo && patient.contactInfo.some(contact => contact.contactDetail.includes(lowercasedSearch));
+        const matchesContact = patient.contactInfo && patient.contactInfo.some(contact => contact.contactDetail.toLowerCase().includes(lowercasedSearch));
         const matchesStatus = patient.isActive.toLowerCase().includes(lowercasedSearch);
 
         return (
@@ -105,7 +93,7 @@ const PatientList = () => {
           <Box display="flex" gap={2} alignItems="center">
             <TextField
               variant="outlined"
-              label="Search (Name, DOB, Contacts, or Status)"
+              label="Search (Name, Date of Birth, or Status)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               InputProps={{
@@ -126,6 +114,13 @@ const PatientList = () => {
               Add Patient
             </Button>
           </Box>
+          {error && (
+            <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
+              <Alert onClose={() => setError(null)} severity="error">
+                {error}
+              </Alert>
+            </Snackbar>
+          )}
           <Table>
             <TableHead>
               <TableRow>
@@ -134,7 +129,6 @@ const PatientList = () => {
                 <TableCell>Date of Birth</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Actions</TableCell>
-                
               </TableRow>
             </TableHead>
             <TableBody>
@@ -144,7 +138,6 @@ const PatientList = () => {
                   <TableCell>{patient.lastName}</TableCell>
                   <TableCell>{formatDate(patient.dateOfBirth)}</TableCell>
                   <TableCell>{patient.isActive}</TableCell>
-                  
                   <TableCell>
                     <Tooltip title="View Details">
                       <IconButton color="primary" onClick={() => handleViewDetails(patient.patientID)}>

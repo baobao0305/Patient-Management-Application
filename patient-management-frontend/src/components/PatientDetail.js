@@ -6,7 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 const PatientDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   const [patient, setPatient] = useState({
     firstName: '',
     lastName: '',
@@ -17,36 +17,28 @@ const PatientDetail = () => {
     phoneContacts: [],
     emailContacts: [],
     status: '',
-    inactiveReason: '' // Add this field to the state
+    inactiveReason: '' // Field for inactive reason
   });
 
   useEffect(() => {
     const fetchPatient = async () => {
       try {
-        
-        // Fetch patient information
-        const response = await axios.get(`https://localhost:7141/api/patients/${id}`);
-        const patientData = response.data;
-        console.log('Patient data:', response.data); // Kiểm tra dữ liệu
+        // Fetch patient details
+        const { data: patientData } = await axios.get(`https://localhost:7141/api/patients/${id}`);
+        console.log('Patient data:', patientData);
 
-        // Fetch addresses
-        const addressesResponse = await axios.get(`https://localhost:7141/api/patients/${id}/addresses`);
-        const addresses = addressesResponse.data;
+        // Fetch addresses and contacts
+        const { data: addresses } = await axios.get(`https://localhost:7141/api/patients/${id}/addresses`);
+        const { data: contactsData } = await axios.get(`https://localhost:7141/api/patients/${id}/contacts`);
+        const contacts = contactsData.$values || [];
 
-        // Fetch contacts
-        const contactsResponse = await axios.get(`https://localhost:7141/api/patients/${id}/contacts`);
-        const contactsData = contactsResponse.data.$values || [];
-
-        // Ensure addresses is an object and has the necessary properties
+        // Extract addresses
         const primaryAddress = addresses.primaryAddress || '';
         const secondaryAddress = addresses.secondaryAddress || '';
 
-
-        // Separate phone and email contacts
-        const phoneContacts = contactsData.filter(c => c.contactType === 'Phone').map(c => c.contactDetail);
-        const emailContacts = contactsData.filter(c => c.contactType === 'Email').map(c => c.contactDetail);
-
-        // Format date of birth
+        // Extract and format contacts
+        const phoneContacts = contacts.filter(c => c.contactType === 'Phone').map(c => c.contactDetail);
+        const emailContacts = contacts.filter(c => c.contactType === 'Email').map(c => c.contactDetail);
         const formattedDateOfBirth = patientData.dateOfBirth ? new Date(patientData.dateOfBirth).toLocaleDateString('en-GB') : '';
 
         setPatient({
@@ -59,7 +51,7 @@ const PatientDetail = () => {
           phoneContacts,
           emailContacts,
           status: patientData.isActive,
-          inactiveReason: patientData.inactiveReason || '' // Fetch inactive reason
+          inactiveReason: patientData.inactiveReason || ''
         });
       } catch (error) {
         console.error('Error fetching patient data:', error);

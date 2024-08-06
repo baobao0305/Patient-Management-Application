@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { TextField, Button, Paper, FormControl, InputLabel, Select, MenuItem,  } from '@mui/material';
+import { TextField, Button, Paper, FormControl, InputLabel, Select, MenuItem, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const AddPatientForm = () => {
+  // State để lưu trữ dữ liệu của form
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [gender, setGender] = useState('');
@@ -11,9 +13,9 @@ const AddPatientForm = () => {
   const [emails, setEmails] = useState(['']);
   const [primaryAddress, setPrimaryAddress] = useState('');
   const [secondaryAddress, setSecondaryAddress] = useState('');
-  const [isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState('Active');
 
-
+  // Hàm xử lý submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     const patient = {
@@ -23,8 +25,8 @@ const AddPatientForm = () => {
       dateOfBirth,
       isActive,
       ContactInfo: [
-        ...phones.map(phone => ({ ContactType: 'Phone', ContactDetail: phone})),
-        ...emails.map(email => ({ ContactType: 'Email', ContactDetail: email})),
+        ...phones.map(phone => ({ ContactType: 'Phone', ContactDetail: phone })),
+        ...emails.map(email => ({ ContactType: 'Email', ContactDetail: email })),
       ],
       Addresses: [
         { AddressType: 'Primary', AddressDetail: primaryAddress },
@@ -32,11 +34,10 @@ const AddPatientForm = () => {
       ]
     };
 
-    
     try {
-      const response = await axios.post('https://localhost:7141/api/patients', patient);
-      console.log(response.data);
+      await axios.post('https://localhost:7141/api/patients', patient);
       alert('Patient added successfully!');
+      // Reset form after successful submission
       setFirstName('');
       setLastName('');
       setGender('');
@@ -45,54 +46,48 @@ const AddPatientForm = () => {
       setEmails(['']);
       setPrimaryAddress('');
       setSecondaryAddress('');
-      setIsActive(true);
+      setIsActive('Active');
     } catch (error) {
-      if (error.response) {
-        console.error('Error adding patient:', error.response.data);
-        alert(`Error adding patient: ${error.response.data}`);
-    } else if (error.request) {
-        console.error('Error adding patient: No response received');
-        alert('Error adding patient: No response received');
-    } else {
-        console.error('Error adding patient:', error.message);
-        alert(`Error adding patient: ${error.message}`);
-    }
+      // Handle errors
+      const errorMessage = error.response
+        ? `Error adding patient: ${error.response.data}`
+        : error.request
+        ? 'Error adding patient: No response received'
+        : `Error adding patient: ${error.message}`;
+      alert(errorMessage);
     }
   };
 
-  const handleAddPhone = () => {
-    setPhones([...phones, '']);
-  };
+  // Thêm phone mới
+  const handleAddPhone = () => setPhones([...phones, '']);
 
-  const handleAddEmail = () => {
-    setEmails([...emails, '']);
-  };
+  // Thêm email mới
+  const handleAddEmail = () => setEmails([...emails, '']);
 
+  // Thay đổi giá trị của phone
   const handleChangePhone = (index, e) => {
     const newPhones = phones.map((phone, i) => (i === index ? e.target.value : phone));
     setPhones(newPhones);
   };
 
+  // Thay đổi giá trị của email
   const handleChangeEmail = (index, e) => {
     const newEmails = emails.map((email, i) => (i === index ? e.target.value : email));
     setEmails(newEmails);
   };
 
-  const handleRemovePhone = (index) => {
-    setPhones(phones.filter((_, i) => i !== index));
-  };
+  // Xóa phone
+  const handleRemovePhone = (index) => setPhones(phones.filter((_, i) => i !== index));
 
-  const handleRemoveEmail = (index) => {
-    setEmails(emails.filter((_, i) => i !== index));
-  };
-
+  // Xóa email
+  const handleRemoveEmail = (index) => setEmails(emails.filter((_, i) => i !== index));
 
   return (
     <div className="container">
       <h2>Add New Patient</h2>
       <Paper style={{ padding: '16px' }}>
         <form onSubmit={handleSubmit}>
-        <h3>Demographics</h3>
+          <h3>Demographics</h3>
           <TextField
             label="First Name"
             variant="outlined"
@@ -113,11 +108,7 @@ const AddPatientForm = () => {
           />
           <FormControl fullWidth margin="normal" required>
             <InputLabel>Gender</InputLabel>
-            <Select
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              label="Gender"
-            >
+            <Select value={gender} onChange={(e) => setGender(e.target.value)} label="Gender">
               <MenuItem value="Male">Male</MenuItem>
               <MenuItem value="Female">Female</MenuItem>
             </Select>
@@ -133,7 +124,7 @@ const AddPatientForm = () => {
             onChange={(e) => setDateOfBirth(e.target.value)}
             required
           />
-                    <h3>Addresses</h3>
+          <h3>Addresses</h3>
           <TextField
             label="Primary Address"
             variant="outlined"
@@ -153,7 +144,7 @@ const AddPatientForm = () => {
           />
           <h3>Contact Info</h3>
           {phones.map((phone, index) => (
-            <div key={index} style={{ marginBottom: '16px' }}>
+            <div key={index} style={{ marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
               <TextField
                 label="Phone Number"
                 variant="outlined"
@@ -164,9 +155,9 @@ const AddPatientForm = () => {
                 required
               />
               {index > 0 && (
-              <Button size="small" variant="contained" color="secondary" onClick={() => handleRemovePhone(index)} style={{ marginTop: '8px' }}>
-                Remove Phone
-              </Button>
+                <IconButton size="small" color="secondary" onClick={() => handleRemovePhone(index)} style={{ marginLeft: '8px' }}>
+                  <DeleteIcon />
+                </IconButton>
               )}
             </div>
           ))}
@@ -174,7 +165,7 @@ const AddPatientForm = () => {
             Add Phone Number
           </Button>
           {emails.map((email, index) => (
-            <div key={index} style={{ marginBottom: '16px' }}>
+            <div key={index} style={{ marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
               <TextField
                 label="Email Address"
                 variant="outlined"
@@ -185,17 +176,18 @@ const AddPatientForm = () => {
                 required
               />
               {index > 0 && (
-              <Button size="small" variant="contained" color="secondary" onClick={() => handleRemoveEmail(index)} style={{ marginTop: '8px' }}>
-                Remove Email
-              </Button>
+                <IconButton size="small" color="secondary" onClick={() => handleRemoveEmail(index)} style={{ marginLeft: '8px' }}>
+                  <DeleteIcon />
+                </IconButton>
               )}
             </div>
           ))}
           <Button size="small" variant="contained" color="primary" onClick={handleAddEmail}>
             Add Email Address
           </Button>
-
-          <Button size="large" type="submit" variant="contained" color="primary" style={{ marginTop: '8px',  display: 'block' }}>Add Patient</Button>
+          <Button size="large" type="submit" variant="contained" color="primary" style={{ marginTop: '8px', display: 'block' }}>
+            Add Patient
+          </Button>
         </form>
       </Paper>
     </div>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { TextField, Button, Paper, MenuItem } from '@mui/material';
+import { TextField, Button, Paper, MenuItem, IconButton } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const UpdatePatientForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   const [patient, setPatient] = useState({
     firstName: '',
     lastName: '',
@@ -16,37 +17,34 @@ const UpdatePatientForm = () => {
     secondaryAddress: '',
     phoneContacts: [],
     emailContacts: [],
-    isActive:'', // default value
-    inactiveReason: '' 
+    isActive: '', // Default value
+    inactiveReason: ''
   });
 
   useEffect(() => {
     const fetchPatient = async () => {
       try {
         // Fetch patient information
-        const patientResponse = await axios.get(`https://localhost:7141/api/patients/${id}`);
-        const patientData = patientResponse.data;
-
+        const { data: patientData } = await axios.get(`https://localhost:7141/api/patients/${id}`);
         // Fetch addresses
-        const addressesResponse = await axios.get(`https://localhost:7141/api/patients/${id}/addresses`);
-        const addresses = addressesResponse.data;
-
+        const { data: addresses } = await axios.get(`https://localhost:7141/api/patients/${id}/addresses`);
         // Fetch contacts
-        const contactsResponse = await axios.get(`https://localhost:7141/api/patients/${id}/contacts`);
-        const contactsData = contactsResponse.data.$values || [];
+        const { data: contactsData } = await axios.get(`https://localhost:7141/api/patients/${id}/contacts`);
+        const contacts = contactsData.$values || [];
 
         // Extract address details
         const primaryAddress = addresses.primaryAddress || '';
         const secondaryAddress = addresses.secondaryAddress || '';
 
         // Separate phone and email contacts
-        const phoneContacts = contactsData.filter(c => c.contactType === 'Phone').map(c => c.contactDetail);
-        const emailContacts = contactsData.filter(c => c.contactType === 'Email').map(c => c.contactDetail);
+        const phoneContacts = contacts.filter(c => c.contactType === 'Phone').map(c => c.contactDetail);
+        const emailContacts = contacts.filter(c => c.contactType === 'Email').map(c => c.contactDetail);
 
-      // Format date of birth
-      const date = new Date(patientData.dateOfBirth);
-      date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-      const formattedDateOfBirth = date.toISOString().split('T')[0];
+        // Format date of birth
+        const date = new Date(patientData.dateOfBirth);
+        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+        const formattedDateOfBirth = date.toISOString().split('T')[0];
+
         setPatient({
           firstName: patientData.firstName,
           lastName: patientData.lastName,
@@ -76,13 +74,30 @@ const UpdatePatientForm = () => {
     updatedContacts[index] = e.target.value;
     setPatient({ ...patient, [type]: updatedContacts });
   };
-  
+
   const handleAddContact = (type) => {
     setPatient({ ...patient, [type]: [...patient[type], ''] });
   };
 
+  const handleRemoveContact = (index, type) => {
+    const updatedContacts = patient[type].filter((_, i) => i !== index);
+    setPatient({ ...patient, [type]: updatedContacts });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!patient.primaryAddress.trim()) {
+      alert('Primary address cannot be empty.');
+      return;
+    }
+    if (patient.phoneContacts.length === 0) {
+      alert('At least one phone contact is required.');
+      return;
+    }
+    if (patient.emailContacts.length === 0) {
+      alert('At least one email contact is required.');
+      return;
+    }
     if (patient.isActive === 'Inactive' && !patient.inactiveReason) {
       alert('Please provide a reason for inactivation.');
       return;
@@ -94,7 +109,7 @@ const UpdatePatientForm = () => {
         lastName: patient.lastName,
         gender: patient.gender,
         dateOfBirth: patient.dateOfBirth,
-        isActive: patient.isActive , // Chuyển đổi thành boolean
+        isActive: patient.isActive === 'Active', // Convert to boolean
         inactiveReason: patient.isActive === 'Active' ? null : patient.inactiveReason,
         ContactInfo: [
           ...patient.phoneContacts.map(contact => ({ ContactType: 'Phone', ContactDetail: contact, PatientID: id })),
@@ -129,6 +144,7 @@ const UpdatePatientForm = () => {
             value={patient.firstName}
             onChange={handleChange}
             required
+            error={!patient.firstName.trim()}
           />
           <TextField
             label="Last Name"
@@ -139,6 +155,7 @@ const UpdatePatientForm = () => {
             value={patient.lastName}
             onChange={handleChange}
             required
+            error={!patient.lastName.trim()}
           />
           <TextField
             label="Gender"
@@ -190,6 +207,7 @@ const UpdatePatientForm = () => {
               value={patient.inactiveReason}
               onChange={handleChange}
               required
+              error={!patient.inactiveReason.trim()}
             />
           )}
           <h3>Addresses</h3>
@@ -201,6 +219,8 @@ const UpdatePatientForm = () => {
             margin="normal"
             value={patient.primaryAddress}
             onChange={handleChange}
+            required
+            error={!patient.primaryAddress.trim()}
           />
           <TextField
             label="Secondary Address"
@@ -213,34 +233,56 @@ const UpdatePatientForm = () => {
           />
           <h3>Contacts</h3>
           {patient.phoneContacts.map((contact, index) => (
-            <TextField
-              key={index}
-              label={`Phone Contact ${index + 1}`}
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={contact}
-              onChange={(e) => handleChangeContact(index, 'phoneContacts', e)}
-            />
+            <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+              <TextField
+                label={`Phone Contact ${index + 1}`}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={contact}
+                onChange={(e) => handleChangeContact(index, 'phoneContacts', e)}
+                required
+                error={!contact.trim()}
+              />
+              <IconButton
+                color="error"
+                onClick={() => handleRemoveContact(index, 'phoneContacts')}
+                style={{ marginLeft: '8px' }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </div>
           ))}
           <Button variant="outlined" onClick={() => handleAddContact('phoneContacts')}>
             Add Phone Contact
           </Button>
           {patient.emailContacts.map((contact, index) => (
-            <TextField
-              key={index}
-              label={`Email Contact ${index + 1}`}
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={contact}
-              onChange={(e) => handleChangeContact(index, 'emailContacts', e)}
-            />
+            <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+              <TextField
+                label={`Email Contact ${index + 1}`}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={contact}
+                onChange={(e) => handleChangeContact(index, 'emailContacts', e)}
+                required
+                error={!contact.trim()}
+              />
+              <IconButton
+                color="error"
+                onClick={() => handleRemoveContact(index, 'emailContacts')}
+                style={{ marginLeft: '8px' }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </div>
           ))}
           <Button variant="outlined" onClick={() => handleAddContact('emailContacts')}>
             Add Email Contact
           </Button>
-          <Button type="submit" variant="contained" color="primary" style={{ marginTop: '8px', display: 'block' }}>Update Patient</Button>
+          <Button type="submit" variant="contained" color="primary" style={{ marginTop: '16px' }}>
+            Update Patient
+          </Button>
         </form>
       </Paper>
     </div>

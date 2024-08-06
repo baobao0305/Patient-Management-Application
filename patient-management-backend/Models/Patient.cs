@@ -9,54 +9,48 @@ namespace PatientManagementApi.Models
         [Key]
         public int PatientID { get; set; }
 
-        [MaxLength(100)]
-        public string FirstName { get; set; }
-
-        [MaxLength(100)]
-        public string LastName { get; set; }
-
-        [MaxLength(10)]
-        public string Gender { get; set; }
-
-        [MaxLength(10)]
-        public string IsActive { get; set; }
         
-        [MaxLength(200)]
-        public string InactiveReason { get; set; }
+        public string? FirstName { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
         
-        public ICollection<ContactInfo> ContactInfo { get; set; } = new HashSet<ContactInfo>();
-        public ICollection<Addresses> Addresses { get; set; } = new HashSet<Addresses>();
+        public string? LastName { get; set; }
+
+        
+        public string? Gender { get; set; }
+
+        public string? IsActive { get; set; }
+        public string? InactiveReason { get; set; }
+        public DateTime? DateOfBirth { get; set; }    
+        public ICollection<ContactInfo> ContactInfo { get; set; }
+        public ICollection<Addresses> Addresses { get; set; }
+        
     }
 
     public class ContactInfo
     {
         [Key]
         public int ContactID { get; set; }
-
-        [MaxLength(50)]
-        public string ContactType { get; set; }
-
-        [MaxLength(100)]
-        public string ContactDetail { get; set; }
-
+        
+        public string? ContactType { get; set; }
+        
+        public string? ContactDetail { get; set; }
+        
         public int PatientID { get; set; }
-        public Patient Patient { get; set; }
+        public Patient? Patient { get; set; }
     }
 
-    public class Addresses
+        public class Addresses
     {
         [Key]
         public int AddressID { get; set; }
-
-        [MaxLength(50)]
-        public string AddressType { get; set; }
-
-        [MaxLength(200)]
-        public string AddressDetail { get; set; }
-
+        
+        public string? AddressType { get; set; }
+        
+        public string? AddressDetail { get; set; }
+        
         public int PatientID { get; set; }
-        public Patient Patient { get; set; }
+        public Patient? Patient { get; set; }
     }
+
+
 }
