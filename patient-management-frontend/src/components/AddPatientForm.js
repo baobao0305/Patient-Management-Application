@@ -4,7 +4,6 @@ import { TextField, Button, Paper, FormControl, InputLabel, Select, MenuItem, Ic
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const AddPatientForm = () => {
-  // State để lưu trữ dữ liệu của form
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [gender, setGender] = useState('');
@@ -15,7 +14,6 @@ const AddPatientForm = () => {
   const [secondaryAddress, setSecondaryAddress] = useState('');
   const [isActive, setIsActive] = useState('Active');
 
-  // Hàm xử lý submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     const patient = {
@@ -35,9 +33,9 @@ const AddPatientForm = () => {
     };
 
     try {
-      await axios.post('https://localhost:7141/api/patients', patient);
+      const response = await axios.post('https://localhost:7141/api/patients', patient);
+      console.log(response.data);
       alert('Patient added successfully!');
-      // Reset form after successful submission
       setFirstName('');
       setLastName('');
       setGender('');
@@ -48,39 +46,44 @@ const AddPatientForm = () => {
       setSecondaryAddress('');
       setIsActive('Active');
     } catch (error) {
-      // Handle errors
-      const errorMessage = error.response
-        ? `Error adding patient: ${error.response.data}`
-        : error.request
-        ? 'Error adding patient: No response received'
-        : `Error adding patient: ${error.message}`;
-      alert(errorMessage);
+      if (error.response) {
+        console.error('Error adding patient:', error.response.data);
+        alert(`Error adding patient: ${error.response.data}`);
+      } else if (error.request) {
+        console.error('Error adding patient: No response received');
+        alert('Error adding patient: No response received');
+      } else {
+        console.error('Error adding patient:', error.message);
+        alert(`Error adding patient: ${error.message}`);
+      }
     }
   };
 
-  // Thêm phone mới
-  const handleAddPhone = () => setPhones([...phones, '']);
+  const handleAddPhone = () => {
+    setPhones([...phones, '']);
+  };
 
-  // Thêm email mới
-  const handleAddEmail = () => setEmails([...emails, '']);
+  const handleAddEmail = () => {
+    setEmails([...emails, '']);
+  };
 
-  // Thay đổi giá trị của phone
   const handleChangePhone = (index, e) => {
     const newPhones = phones.map((phone, i) => (i === index ? e.target.value : phone));
     setPhones(newPhones);
   };
 
-  // Thay đổi giá trị của email
   const handleChangeEmail = (index, e) => {
     const newEmails = emails.map((email, i) => (i === index ? e.target.value : email));
     setEmails(newEmails);
   };
 
-  // Xóa phone
-  const handleRemovePhone = (index) => setPhones(phones.filter((_, i) => i !== index));
+  const handleRemovePhone = (index) => {
+    setPhones(phones.filter((_, i) => i !== index));
+  };
 
-  // Xóa email
-  const handleRemoveEmail = (index) => setEmails(emails.filter((_, i) => i !== index));
+  const handleRemoveEmail = (index) => {
+    setEmails(emails.filter((_, i) => i !== index));
+  };
 
   return (
     <div className="container">
@@ -108,7 +111,11 @@ const AddPatientForm = () => {
           />
           <FormControl fullWidth margin="normal" required>
             <InputLabel>Gender</InputLabel>
-            <Select value={gender} onChange={(e) => setGender(e.target.value)} label="Gender">
+            <Select
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              label="Gender"
+            >
               <MenuItem value="Male">Male</MenuItem>
               <MenuItem value="Female">Female</MenuItem>
             </Select>
