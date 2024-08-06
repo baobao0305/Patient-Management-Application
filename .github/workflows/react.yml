@@ -1,0 +1,39 @@
+name: Deploy React App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'  # Hoặc phiên bản Node.js bạn sử dụng
+
+    - name: Install dependencies
+      working-directory: patient-management-frontend
+      run: npm install
+
+    - name: Build
+      run: |
+          cd patient-management-frontend
+          export NODE_OPTIONS=--openssl-legacy-provider
+          npm run build
+
+    - name: Deploy to GitHub Pages
+      uses: jamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: patient-management-frontend/build
+        token: ${{ secrets.GH_PAT }}
+        clean: true
+        force: true
