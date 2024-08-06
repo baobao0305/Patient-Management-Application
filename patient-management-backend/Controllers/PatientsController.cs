@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PatientManagementApi.Models;  
-using PatientManagementApi.Data;   
+using PatientManagementApi.Models;
+using PatientManagementApi.Data;
 
 namespace PatientManagementApi.Controllers
 {
@@ -28,7 +28,7 @@ namespace PatientManagementApi.Controllers
         public async Task<ActionResult<Patient>> GetPatient(int id)
         {
             var patient = await _context.Patients
-                .Include(p => p.ContactInfo)  // Bao gồm ContactInfo
+                .Include(p => p.ContactInfo)
                 .Include(p => p.Addresses)
                 .FirstOrDefaultAsync(p => p.PatientID == id);
 
@@ -51,26 +51,25 @@ namespace PatientManagementApi.Controllers
 
             patient.IsActive = "Active";
 
-            // Add patient
             _context.Patients.Add(patient);
 
-            // Update ContactInfo with the PatientID
             foreach (var contact in patient.ContactInfo)
             {
                 contact.PatientID = patient.PatientID;
-                _context.ContactInfo.Add(contact); // Set PatientID for the contact info
+                _context.ContactInfo.Add(contact);
             }
             foreach (var address in patient.Addresses)
             {
                 address.PatientID = patient.PatientID;
                 _context.Addresses.Add(address);
             }
-            await _context.SaveChangesAsync();  
+
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPatient), new { id = patient.PatientID }, patient);
         }
 
-
+        // PUT: api/patients/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePatient(int id, [FromBody] Patient patient)
         {
@@ -94,35 +93,23 @@ namespace PatientManagementApi.Controllers
                 return NotFound();
             }
 
-            // Update basic patient info
+            // Update patient details
             existingPatient.FirstName = patient.FirstName;
             existingPatient.LastName = patient.LastName;
             existingPatient.Gender = patient.Gender;
             existingPatient.DateOfBirth = patient.DateOfBirth;
-
-            // Update status and inactive reason
             existingPatient.IsActive = patient.IsActive;
-            if (patient.IsActive == "Active")
-            {
-                existingPatient.InactiveReason = null; // Reset InactiveReason if patient is active
-            }
-            else if (patient.IsActive == "Inactive")
-            {
-                existingPatient.InactiveReason = patient.InactiveReason;
-            }
+            existingPatient.InactiveReason = patient.IsActive == "Active" ? null : patient.InactiveReason;
 
             // Update contact info
             var existingContacts = existingPatient.ContactInfo.ToList();
             var newContacts = patient.ContactInfo.ToList();
-
-            // Remove contacts that are no longer in the new list
             var contactsToRemove = existingContacts
                 .Where(existingContact => !newContacts.Any(newContact => newContact.ContactID == existingContact.ContactID))
                 .ToList();
 
             _context.ContactInfo.RemoveRange(contactsToRemove);
 
-            // Update existing contacts and add new ones
             foreach (var newContact in newContacts)
             {
                 var existingContact = existingContacts.FirstOrDefault(c => c.ContactID == newContact.ContactID);
@@ -133,7 +120,6 @@ namespace PatientManagementApi.Controllers
                 }
                 else
                 {
-                    // Ensure that new contacts are added without changing IDs
                     newContact.PatientID = id;
                     _context.ContactInfo.Add(newContact);
                 }
@@ -142,15 +128,12 @@ namespace PatientManagementApi.Controllers
             // Update addresses
             var existingAddresses = existingPatient.Addresses.ToList();
             var newAddresses = patient.Addresses.ToList();
-
-            // Remove addresses that are no longer in the new list
             var addressesToRemove = existingAddresses
                 .Where(existingAddress => !newAddresses.Any(newAddress => newAddress.AddressID == existingAddress.AddressID))
                 .ToList();
 
             _context.Addresses.RemoveRange(addressesToRemove);
 
-            // Update existing addresses and add new ones
             foreach (var newAddress in newAddresses)
             {
                 var existingAddress = existingAddresses.FirstOrDefault(a => a.AddressID == newAddress.AddressID);
@@ -161,7 +144,6 @@ namespace PatientManagementApi.Controllers
                 }
                 else
                 {
-                    // Ensure that new addresses are added without changing IDs
                     newAddress.PatientID = id;
                     _context.Addresses.Add(newAddress);
                 }
@@ -186,6 +168,7 @@ namespace PatientManagementApi.Controllers
             return NoContent();
         }
 
+        // GET: api/patients/5/addresses
         [HttpGet("{id}/addresses")]
         public async Task<IActionResult> GetAddresses(int id)
         {
@@ -207,6 +190,7 @@ namespace PatientManagementApi.Controllers
             return Ok(addresses);
         }
 
+        // PUT: api/patients/5/addresses
         [HttpPut("{id}/addresses")]
         public async Task<IActionResult> UpdateAddresses(int id, [FromBody] List<Addresses> addresses)
         {
@@ -233,6 +217,7 @@ namespace PatientManagementApi.Controllers
             return NoContent();
         }
 
+        // GET: api/patients/5/contacts
         [HttpGet("{id}/contacts")]
         public async Task<IActionResult> GetContacts(int id)
         {
@@ -248,10 +233,10 @@ namespace PatientManagementApi.Controllers
             return Ok(contacts);
         }
 
+        // PUT: api/patients/5/contacts
         [HttpPut("{id}/contacts")]
         public async Task<IActionResult> UpdateContacts(int id, [FromBody] List<ContactInfo> contacts)
         {
-            // Xóa tất cả liên hệ hiện tại
             var existingContacts = await _context.ContactInfo
                 .Where(c => c.PatientID == id)
                 .ToListAsync();
@@ -264,7 +249,6 @@ namespace PatientManagementApi.Controllers
             _context.ContactInfo.RemoveRange(existingContacts);
             await _context.SaveChangesAsync();
 
-            // Thêm các liên hệ mới
             foreach (var contact in contacts)
             {
                 contact.PatientID = id;
