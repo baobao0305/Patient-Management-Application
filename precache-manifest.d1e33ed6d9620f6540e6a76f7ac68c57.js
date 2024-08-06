@@ -1,31 +1,31 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b80eada4aa3e9ac08d02cbcc8fda5881",
+    "revision": "2dfa059b37579a9973782d8d12495156",
     "url": "/Patient-Management-Application/index.html"
   },
   {
-    "revision": "7bcbf30a7bb3e51cb16e",
+    "revision": "8973401b019f302e8e51",
     "url": "/Patient-Management-Application/static/css/2.b71989ea.chunk.css"
   },
   {
-    "revision": "ee673b28b444de130b62",
+    "revision": "f352db73c4567480e269",
     "url": "/Patient-Management-Application/static/css/main.5ecd60fb.chunk.css"
   },
   {
-    "revision": "7bcbf30a7bb3e51cb16e",
-    "url": "/Patient-Management-Application/static/js/2.cec931c6.chunk.js"
+    "revision": "8973401b019f302e8e51",
+    "url": "/Patient-Management-Application/static/js/2.a3ab2fe1.chunk.js"
   },
   {
     "revision": "f81b1d521955ed7a361461485de1c1c0",
-    "url": "/Patient-Management-Application/static/js/2.cec931c6.chunk.js.LICENSE.txt"
+    "url": "/Patient-Management-Application/static/js/2.a3ab2fe1.chunk.js.LICENSE.txt"
   },
   {
     "revision": "644892a8954fa13a8ba4",
     "url": "/Patient-Management-Application/static/js/3.8d5dac00.chunk.js"
   },
   {
-    "revision": "ee673b28b444de130b62",
-    "url": "/Patient-Management-Application/static/js/main.79dff0b0.chunk.js"
+    "revision": "f352db73c4567480e269",
+    "url": "/Patient-Management-Application/static/js/main.ec21e2a2.chunk.js"
   },
   {
     "revision": "1861ba01e22daf46282c",

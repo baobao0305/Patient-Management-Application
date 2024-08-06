@@ -1,27 +1,27 @@
 {
   "files": {
     "main.css": "/Patient-Management-Application/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/Patient-Management-Application/static/js/main.79dff0b0.chunk.js",
-    "main.js.map": "/Patient-Management-Application/static/js/main.79dff0b0.chunk.js.map",
+    "main.js": "/Patient-Management-Application/static/js/main.ec21e2a2.chunk.js",
+    "main.js.map": "/Patient-Management-Application/static/js/main.ec21e2a2.chunk.js.map",
     "runtime-main.js": "/Patient-Management-Application/static/js/runtime-main.f3e32b1b.js",
     "runtime-main.js.map": "/Patient-Management-Application/static/js/runtime-main.f3e32b1b.js.map",
     "static/css/2.b71989ea.chunk.css": "/Patient-Management-Application/static/css/2.b71989ea.chunk.css",
-    "static/js/2.cec931c6.chunk.js": "/Patient-Management-Application/static/js/2.cec931c6.chunk.js",
-    "static/js/2.cec931c6.chunk.js.map": "/Patient-Management-Application/static/js/2.cec931c6.chunk.js.map",
+    "static/js/2.a3ab2fe1.chunk.js": "/Patient-Management-Application/static/js/2.a3ab2fe1.chunk.js",
+    "static/js/2.a3ab2fe1.chunk.js.map": "/Patient-Management-Application/static/js/2.a3ab2fe1.chunk.js.map",
     "static/js/3.8d5dac00.chunk.js": "/Patient-Management-Application/static/js/3.8d5dac00.chunk.js",
     "static/js/3.8d5dac00.chunk.js.map": "/Patient-Management-Application/static/js/3.8d5dac00.chunk.js.map",
     "index.html": "/Patient-Management-Application/index.html",
-    "precache-manifest.fd6b6927e07f635d913b98b17b4bf19b.js": "/Patient-Management-Application/precache-manifest.fd6b6927e07f635d913b98b17b4bf19b.js",
+    "precache-manifest.d1e33ed6d9620f6540e6a76f7ac68c57.js": "/Patient-Management-Application/precache-manifest.d1e33ed6d9620f6540e6a76f7ac68c57.js",
     "service-worker.js": "/Patient-Management-Application/service-worker.js",
     "static/css/2.b71989ea.chunk.css.map": "/Patient-Management-Application/static/css/2.b71989ea.chunk.css.map",
     "static/css/main.5ecd60fb.chunk.css.map": "/Patient-Management-Application/static/css/main.5ecd60fb.chunk.css.map",
-    "static/js/2.cec931c6.chunk.js.LICENSE.txt": "/Patient-Management-Application/static/js/2.cec931c6.chunk.js.LICENSE.txt"
+    "static/js/2.a3ab2fe1.chunk.js.LICENSE.txt": "/Patient-Management-Application/static/js/2.a3ab2fe1.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.f3e32b1b.js",
     "static/css/2.b71989ea.chunk.css",
-    "static/js/2.cec931c6.chunk.js",
+    "static/js/2.a3ab2fe1.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.79dff0b0.chunk.js"
+    "static/js/main.ec21e2a2.chunk.js"
   ]
 }
